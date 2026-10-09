@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Backend/">
+    <Project Path="src/Backend/MySqlManager.Api/MySqlManager.Api.csproj" />
+    <Project Path="src/Backend/MySqlManager.Application/MySqlManager.Application.csproj" />
+    <Project Path="src/Backend/MySqlManager.Domain/MySqlManager.Domain.csproj" />
+    <Project Path="src/Backend/MySqlManager.Infrastructure/MySqlManager.Infrastructure.csproj" />
+    <Project Path="src/Backend/MySqlManager.Worker/MySqlManager.Worker.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MySqlManager.Api.Tests/MySqlManager.Api.Tests.csproj" />
+    <Project Path="tests/MySqlManager.Application.Tests/MySqlManager.Application.Tests.csproj" />
+    <Project Path="tests/MySqlManager.Domain.Tests/MySqlManager.Domain.Tests.csproj" />
+    <Project Path="tests/MySqlManager.Infrastructure.Tests/MySqlManager.Infrastructure.Tests.csproj" />
+  </Folder>
+</Solution>

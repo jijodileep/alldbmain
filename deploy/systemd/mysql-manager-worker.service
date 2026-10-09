@@ -1,0 +1,12 @@
+[Unit]
+Description=MySQL Manager Worker
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/mysql-manager/worker
+ExecStart=/usr/bin/dotnet /opt/mysql-manager/worker/MySqlManager.Worker.dll
+Restart=always
+Environment=DOTNET_ENVIRONMENT=Production
+
+[Install]
+WantedBy=multi-user.target

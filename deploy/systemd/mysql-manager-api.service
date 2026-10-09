@@ -1,0 +1,13 @@
+[Unit]
+Description=MySQL Manager API
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/mysql-manager/api
+ExecStart=/usr/bin/dotnet /opt/mysql-manager/api/MySqlManager.Api.dll
+Restart=always
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=ASPNETCORE_URLS=http://127.0.0.1:8080
+
+[Install]
+WantedBy=multi-user.target

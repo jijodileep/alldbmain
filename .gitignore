@@ -1,0 +1,12 @@
+bin/
+obj/
+.vs/
+.tools/
+logs/
+data/
+src/Frontend/mysql-manager-web/node_modules/
+src/Frontend/mysql-manager-web/dist/
+*.user
+appsettings.Local.json
+appsettings.Development.json
+.env

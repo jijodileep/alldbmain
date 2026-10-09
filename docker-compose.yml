@@ -1,0 +1,77 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: mysql_manager
+      MYSQL_USER: manager
+      MYSQL_PASSWORD: manager_dev_only
+      MYSQL_ROOT_PASSWORD: root_dev_only
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot_dev_only"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Server=mysql;Port=3306;Database=mysql_manager;User=manager;Password=manager_dev_only;
+      Jwt__SigningKey: DEV_ONLY_CHANGE_THIS_SIGNING_KEY_32CHARS
+      Backup__MasterKeyBase64: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
+      Backup__RootPath: /data/backups
+      Backup__TemporaryPath: /data/tmp
+      Backup__GitWorkspacePath: /data/git
+      Seed__AdminPassword: DevOnly!ChangeMe1
+      Seed__SeedSampleServer: "false"
+    volumes:
+      - backups:/data
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  worker:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.worker
+    environment:
+      DOTNET_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Server=mysql;Port=3306;Database=mysql_manager;User=manager;Password=manager_dev_only;
+      Backup__MasterKeyBase64: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
+      Backup__RootPath: /data/backups
+      Backup__TemporaryPath: /data/tmp
+      Backup__GitWorkspacePath: /data/git
+      Backup__MySqlDumpPath: mysqldump
+      Backup__MySqlClientPath: mysql
+    volumes:
+      - backups:/data
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.web
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
+
+  redis:
+    image: redis:7
+    profiles: ["redis"]
+    ports:
+      - "6379:6379"
+
+volumes:
+  mysql-data:
+  backups:
